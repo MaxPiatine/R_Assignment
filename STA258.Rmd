@@ -1,0 +1,83 @@
+---
+title: "STA258-Assignment"
+output: pdf_document
+---
+
+\begin{tabular}{|l|p{2in}|}
+\hline
+Maxim & Piatine\\ \hline
+Student ID & 1005303100\\ \hline
+\end{tabular}
+
+1. (30 points) You have been given gapminder data set. Using R, Evaluate the five number summary for incomeperperson. Graph boxplot for incomeperperson. Looking at the boxplot, do you think mean will be greater than median? Why ? Use no more than two sentences.
+\medbreak
+The fivenum function provides an insight on the min, max, and the quartiles. After computing the function, the first number is the minimum, second number is the 1st quartile, the third number is the 2nd quartile/the median, the fourth number is the 3rd quartile, and the fifth number is the maximum.
+```{r}
+mydata<-read.csv("gapminder.csv")
+fivenum(mydata$incomeperperson,na.rm = TRUE)
+```
+
+```{r}
+boxplot(mydata$incomeperperson, na.rm=TRUE, horizontal= TRUE, 
+        xlab='Income Per Person', 
+        main='Boxplot Distribution of Income Per Person')
+```
+
+\smallbreak
+Based on the box plot, the mean is greater than the median because the distribution is positively skewed because of the median being closer to the first/bottom quartile. Moreover, the data points are mostly clustered around the left tail; however, the right tail of the distribution is much larger.
+\newpage
+2. (15 points) Suppose that number of days it takes to recover from illness caused due to coronavirus is normally distributed with mean 14 days and standard deviation of 2 days.
+
+ (1) What is the probability that it will take more than 15 days to recover?
+```{r}
+1-pnorm(15, mean=14, sd=2)
+```
+
+\vspace{3mm}
+(2) What is the probability that it will take less than 11 days to recover?
+```{r}
+pnorm(11, mean=14, sd=2)
+```
+\vspace{3mm}
+(3) What is the probability that it takes between 12 days and 15 days to recover?
+```{r}
+pnorm(15, mean=14, sd=2)-pnorm(12, mean=14, sd=2)
+```
+3. (35 points) Data was collected from four STA258 students. The number of text messages these students send while attending 10 STA258 classes is given in the following table:
+\vspace{5mm}
+\begin{center}
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Winston & Marija & Raiyan & Valerie \\ [0.5ex] 
+ \hline\hline
+ 65 & 63 & 60 & 57 \\ 
+ 59 & 65 & 56 & 56 \\
+ 57 & 59 & 59 & 59 \\
+ 58 & 64 & 53 & 56 \\
+ 56 & 62 & 56 & 58 \\ 
+ 59 & 68 & 52 & 60 \\
+ 62 & 63 & 56 & 59 \\
+ 57 & 66 & 58 & 56 \\
+ 57 & 65 & 62 & 62 \\
+ 56 & 72 & 50 & 61 \\ [1ex]
+ \hline
+ \end{tabular}
+\end{center}
+\vspace{5mm}
+Is there any evidence that average number of text messages of at least one of the students is different from the rest? Do a complete hypothesis test. Use $\alpha$ = 0.05. Is the post-hoc test necessary for this problem? How many post hoc test would you do? Run all the post hoc tests using Bonferroni approach. What is your conclusion on post-hoc tests?
+\newpage
+
+```{r}
+winston <- c(65,59,57,58,56,59,62,57,57,56)
+marija <- c(63,65,59,64,62,68,63,66,65,72)
+raiyan <- c(60,56,59,53,56,52,56,58,62,50)
+valerie <- c(57,56,59,56,58,60,59,56,62,61)
+combined_groups <- data.frame(cbind(winston,marija,raiyan,valerie))
+summary(combined_groups)
+sapply(combined_groups,sd,na.rm=TRUE)
+stacked_groups <- stack(combined_groups)
+anova_results <- aov(values ~ ind, data= stacked_groups)
+summary(anova_results)
+pairwise.t.test(stacked_groups$values,stacked_groups$ind,p.adjust.method = "bonf")
+choose(4,2)
+```
