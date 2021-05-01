@@ -1,0 +1,49 @@
+---
+title: "STA256-Assignment"
+output: pdf_document
+---
+
+\begin{tabular}{|l|p{2in}}
+\hline
+Maxim & Piatine\\ \hline
+Student ID & 1005303100\\ \hline
+\end{tabular}
+
+1. (10 points) 30% of the customers at Toronto stores use debit card for their purchases. In a recent market research study, 18 of the store’s over 20000 customers were randomly selected. What is the probability that 6 of the 18 customers use debit card for their purchases?
+```{r}
+dbinom(6, 18, 0.3)
+```
+2. (10 points) 30% of the customers at Toronto stores use debit card for their purchases. In a recent market research study, 18 of the store’s over 20000 customers were randomly selected. What is the probability at least 8 of the 18 customers use debit card for their purchases?
+```{r}
+1-pbinom(7,18,0.3)
+```
+3. (10 points) Customers arrive at the drive-through lane of a coffee shop at a rate of one every 5 minutes. What is the probability that exactly three customers arrive in 15 minutes interval?
+```{r}
+dpois(3,3)
+```
+4. (10 points) Customers arrive at the drive-through lane of a coffee shop at a rate of one every 5 minutes. What is the probability that the waiting time between two customers is more than 7 minutes.
+```{r}
+1-pexp(7,rate=1/5)
+```
+5. (15 points) Suppose the amount of time a light bulb works before burning out is a normal random variable with mean 400 hours and standard deviation 40 hours. 65% of bulbs last less than how many hours?
+```{r}
+qnorm(0.65,mean=400, sd=40)
+```
+6. (15 points) The systolic blood pressures of adults, in the appropriate units, are normally distributed with a mean of 128.4 and a standard deviation of 19.6. What is the probability that systolic blood pressure of randomly selected adult is less than 140?
+```{r}
+pnorm(140, mean= 128.4, sd= 19.6)
+```
+\newpage
+(30 points) Prove that the function given by $f(x)=4xe^{-2x}, x>0$ is a probability density function. Then find the expected value and variance of the random variable which has this density function.
+```{r}
+original_function <- function(x)(4*x*(exp(-2*x)))
+integrate(original_function,0,Inf)
+f <-function(x)(x*(4*x*(exp(-2*x))))
+g <-function(x)((x^2)*(4*x*(exp(-2*x))))
+a <-integrate(f, lower=0, upper=Inf)
+b <-integrate(g, lower=0, upper=Inf)
+variance <-b$value-a$value*a$value
+a 
+variance
+```
+Therefore, $E[X]=1$, $E[X^2]=3/2$, $Var(X)=E[X^2]-[E[X]]^2=3/2 - 1^2= 1/2=0.5$
